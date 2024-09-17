@@ -1,2 +1,2 @@
-# lab1_game
+# lab_games
 a web game written in JavaScript with PhaserJS
