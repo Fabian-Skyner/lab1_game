@@ -5,9 +5,13 @@
 using namespace sf;
 using namespace std;
 
+// TODO: figure out how to identify "ships" in ship.cpp, continue from "Spawning Invaders"
+
 sf::Texture spritesheet;
 //sf::Sprite invader;
 std::vector<Ship *> ships;
+
+extern std::vector<Ship*> ships;
 
 void Load() {
 	if (!spritesheet.loadFromFile("res/img/invaders_sheet.png")) {
@@ -18,6 +22,7 @@ void Load() {
 	
 	Invader* inv = new Invader(sf::IntRect( Vector2i(0, 0), Vector2i(32, 32) ), {100, 100});
 	ships.push_back(inv);
+	Invader::speed = 20.f;
 }
 
 void Update() {
