@@ -15,6 +15,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 add_subdirectory("lib/sfml")
 set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
+##add_subdirectory("lib_ecm/ecm.h") ########################## uh
 
 #### Steal Resources ####
 add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
@@ -23,6 +24,11 @@ add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND}
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/res
 )
 
+#### ECM Library ####
+file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)
+add_library(lib_ecm STATIC ${SOURCE_FILES})
+target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/lib_ecm" )
+target_link_libraries(lib_ecm PRIVATE lib_maths)
 
 #### Practical 1 ####
 file(GLOB_RECURSE SOURCES practical_1/*.cpp practical_1/*.h)
@@ -30,7 +36,7 @@ add_executable(PRACTICAL_1 ${SOURCES})
 target_include_directories(PRACTICAL_1 PRIVATE ${SFML_INCS})
 target_link_libraries(PRACTICAL_1 sfml-graphics)
 
-## Space invaders
+#### Space Invaders ####
 file(GLOB_RECURSE SOURCES space_invaders/*.cpp space_invaders/*.h)
 add_executable(SPACE_INVADERS ${SOURCES} )
 target_include_directories(SPACE_INVADERS SYSTEM PRIVATE ${SFML_INCS})
@@ -41,3 +47,15 @@ set_target_properties(SPACE_INVADERS
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )
 add_dependencies(SPACE_INVADERS copy_resources)
+
+#### Pacman ####
+file(GLOB_RECURSE SOURCES pacman/*.cpp pacman/*.h)
+add_executable(PACMAN ${SOURCES})
+target_include_directories(PACMAN PRIVATE ${SFML_INCS})
+target_link_libraries(PACMAN sfml-graphics)
+
+set_target_properties(PACMAN
+    PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
+)
+add_dependencies(PACMAN lib_maths) ## this does not do anything
