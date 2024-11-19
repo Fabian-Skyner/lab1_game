@@ -15,7 +15,6 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 add_subdirectory("lib/sfml")
 set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
-##add_subdirectory("lib_ecm") ########################## uh
 
 #### Steal Resources ####
 add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
@@ -59,11 +58,10 @@ target_link_libraries(SCARY_MAZE_GAME sfml-graphics)
 #### Pacman ####
 file(GLOB_RECURSE SOURCES pacman/*.cpp pacman/*.h)
 add_executable(PACMAN ${SOURCES})
-target_include_directories(PACMAN PRIVATE ${SFML_INCS})
+target_include_directories(PACMAN PRIVATE ${SFML_INCS} lib_ecm)
 target_link_libraries(PACMAN lib_maths sfml-graphics lib_ecm)
 
 set_target_properties(PACMAN
     PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )
-##add_dependencies(PACMAN lib_maths) ## this does not do anything

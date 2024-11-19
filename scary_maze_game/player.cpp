@@ -1,22 +1,58 @@
 #include "player.h"
+#include "game.h"
+#include <cmath> // needed for square root function
 
 using namespace std;
 using namespace sf;
 
 void Player::Update(double dt) {
-	//MOVE, DAMMIT
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		Entity::move(Vector2f(0, _speed));	//y+ 
+	// the vast majority of this code was generously donated by Hannah Vanderstraeten
+	const float moveSpeed = 200.f;	// movement speed (units/second)
+	
+	sf::Vector2f position = getPosition();
+	
+	// handle horizontal movement
+	float moveX = 0.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		moveX -= moveSpeed * dt;
+	}	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		moveX += moveSpeed * dt;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::A)) {
-		Entity::move(Vector2f(- _speed, 0));	//x- 
+	
+	// handle vertical movement
+	float moveY = 0.f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		moveY -= moveSpeed * dt;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::S)) {
-		Entity::move(Vector2f(0, - _speed));	//y- 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		moveY += moveSpeed * dt;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::D)) {
-		Entity::move(Vector2f(_speed, 0));	//x+ 
+	
+	// nomralize diagonal move speed
+	if (moveX != 0 && moveY != 0) {
+		float diagonalSpeedFactor = std::sqrt(2.f); // scale speed by root 2 when moving diagonally because a^2 + b^2 = c^2
+		moveX /= diagonalSpeedFactor;
+		moveY /= diagonalSpeedFactor;
 	}
+	
+	// update position
+	position.x += moveX;
+	position.y += moveY;
+	
+	// nudge player into bounds of screen if out of them
+	if (position.x < 25) {
+		position.x = 25;
+	} else if (position.x > gameWidth - 25) {
+		position.x = gameWidth - 25;
+	}
+	if (position.y < 25) {
+		position.y = 25;
+	} else if (position.y > gameHeight - 25) {
+		position.y = gameHeight - 25;
+	}
+	
+	setPosition(position);
 	
 	Entity::Update(dt);
 }

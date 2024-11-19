@@ -2,17 +2,19 @@
 #include <iostream>
 #include "entity.h"
 #include "player.h"
+#include "game.h"
 
 using namespace std;
 using namespace sf;
 
-const int gameWidth = 800;
-const int gameHeight = 600;
+//const int gameWidth = 800;
+//const int gameHeight = 600;
 
-Player player; // note to self - this is not even close to corr- nevermind it works?
+std::unique_ptr<Player> player; // note to self - this is not even close to corr- nevermind it works?
 
 void Reset() {
-	player.setPosition(Vector2f(gameWidth / 2.f, gameHeight / 2.f));
+	player = std::make_unique<Player>();
+	player -> setPosition(Vector2f(gameWidth / 2.f, gameHeight / 2.f));
 }
 
 void Load() {
@@ -38,12 +40,12 @@ void Update(RenderWindow &window) {
 	}
 	
 	// update the player
-	&player.Update;
+	player -> Update(dt);
 }
 
 void Render(RenderWindow &window) {
 	// draw all the things
-	window.draw(player);	
+	player -> Render(window);
 }
 
 int main() {

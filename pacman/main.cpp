@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "lib_ecm/ecm.h"
+#include "ecm.h"
 #include "cmp_sprite.h"
 
 // TODO: fix CMakeLists to include ecm and cmp_sprite, continue from "Shape Component" in Pacman lab 2
