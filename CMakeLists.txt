@@ -16,6 +16,12 @@ add_subdirectory("lib/sfml")
 set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 
+## Tile loader lib
+file(GLOB_RECURSE SOURCE_FILES lib_tile_level_loader/*.cpp lib_tile_level_loader/*.h)
+add_library(lib_tile_level_loader STATIC ${SOURCE_FILES})
+target_include_directories(lib_tile_level_loader INTERFACE "${CMAKE_SOURCE_DIR}/lib_tile_level_loader/" )
+target_link_libraries(lib_tile_level_loader sfml-graphics)
+
 #### Steal Resources ####
 add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
   -E copy_directory
@@ -51,7 +57,7 @@ add_dependencies(SPACE_INVADERS copy_resources)
 file(GLOB_RECURSE SOURCES scary_maze_game/*.cpp scary_maze_game/*.h)
 add_executable(SCARY_MAZE_GAME ${SOURCES} )
 target_include_directories(SCARY_MAZE_GAME SYSTEM PRIVATE ${SFML_INCS})
-target_link_libraries(SCARY_MAZE_GAME sfml-graphics)
+target_link_libraries(SCARY_MAZE_GAME sfml-graphics lib_tile_level_loader)
 
 
 
